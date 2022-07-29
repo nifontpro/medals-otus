@@ -1,24 +1,28 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") apply false
 }
 
 group = "ru.otus"
 version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
 }
 
+/*
 tasks.test {
     useJUnitPlatform()
 }
+*/
+/*
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
+    kotlinOptions.jvmTarget = "11"
+}*/
