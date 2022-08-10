@@ -35,6 +35,70 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentCreateResponse'
 
+  /comment/update:
+    post:
+      tags:
+        - comment
+      summary: Создать комментарий для сущности
+      operationId: commentUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentCreateResponse'
+
+  /comment/all:
+    post:
+      tags:
+        - comment
+      summary: Получить все комментарии по типу
+      operationId: getAllComments
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentGetAllRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentGetAllResponse'
+
+  /comment/delete:
+    post:
+      tags:
+        - comment
+      summary: Получить все комментарии по типу
+      operationId: commentDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentId'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentCreateResponse'
+
+
 components:
   schemas:
 
@@ -52,12 +116,10 @@ components:
       discriminator:
         propertyName: requestType
         mapping:
-          create: '#/components/schemas/AdCreateRequest'
-          read: '#/components/schemas/AdReadRequest'
-          update: '#/components/schemas/AdUpdateRequest'
-          delete: '#/components/schemas/AdDeleteRequest'
-          search: '#/components/schemas/AdSearchRequest'
-          offers: '#/components/schemas/AdOffersRequest'
+          create: '#/components/schemas/CommentCreateRequest'
+          read: '#/components/schemas/CommentCreateRequest'
+          update: '#/components/schemas/CommentCreateRequest'
+          delete: '#/components/schemas/CommentCreateRequest'
 
     Error:
       type: object
@@ -102,8 +164,6 @@ components:
           read: '#/components/schemas/CommentCreateResponse'
           update: '#/components/schemas/CommentCreateResponse'
           delete: '#/components/schemas/CommentCreateResponse'
-          search: '#/components/schemas/CommentCreateResponse'
-          offers: '#/components/schemas/CommentCreateResponse'
 
     EntityId:
       type: string
@@ -127,10 +187,10 @@ components:
           $ref: '#/components/schemas/EntityId'
         entityType:
           $ref: '#/components/schemas/EntityType'
-        text:
+        comment:
           type: string
           description: Текст комментария
-        comment:
+        rating:
           type: integer
           description: Рейтинг (0-10)
 
@@ -151,10 +211,24 @@ components:
             comment:
               $ref: '#/components/schemas/BaseComment'
 
+    CommentGetAllRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            type:
+              $ref: '#/components/schemas/EntityType'
+
     CommentCreateResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentGetAllResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseMulti'
 
     CommentResponseObject:
       allOf:
