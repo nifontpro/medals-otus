@@ -11,7 +11,7 @@ class RequestSerializationTest {
             mode = CommentRequestDebugMode.STUB,
             stub = CommentRequestDebugStubs.BAD_RATING
         ),
-        comment = BaseComment(
+        comment = CommentCreateObject(
             entityId = "id_entity",
             entityType = EntityType.AD,
             comment = "Текст комментария",

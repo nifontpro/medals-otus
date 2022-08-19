@@ -18,3 +18,4 @@ pluginManagement {
 
 include("common")
 include("transport-main-openapi")
+include("mappers")

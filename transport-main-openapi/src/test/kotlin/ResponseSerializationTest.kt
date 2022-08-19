@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class ResponseSerializationTest {
     private val response = CommentCreateResponse(
         requestId = "123",
-        comment = BaseComment(
+        comment = CommentResponseObject(
             entityId = "id_entity",
             entityType = EntityType.AD,
             comment = "Текст комментария",

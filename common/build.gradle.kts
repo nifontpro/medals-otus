@@ -2,8 +2,13 @@ plugins {
     kotlin("jvm")
 }
 
+val datetimeVersion: String by project
+
+group = rootProject.group
+version = rootProject.version
+
 dependencies {
-    implementation(project(Modules.transport))
-    testImplementation(kotlin("test"))
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-common"))
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
+    testImplementation(kotlin("test-junit"))
 }

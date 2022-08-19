@@ -56,7 +56,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentCreateResponse'
 
-  /comment/all:
+  /comment/get_all:
     post:
       tags:
         - comment
@@ -81,7 +81,7 @@ paths:
     post:
       tags:
         - comment
-      summary: Получить все комментарии по типу
+      summary: Удалить комментарий
       operationId: commentDelete
       requestBody:
         description: Request body
@@ -96,8 +96,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentCreateResponse'
+                $ref: '#/components/schemas/CommentDeleteResponse'
 
+  /comment/getById:
+    post:
+      tags:
+        - comment
+      summary: Получить комментарий по идентификатору
+      operationId: commentGetById
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentId'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentGetByIdResponse'
 
 components:
   schemas:
@@ -117,9 +137,10 @@ components:
         propertyName: requestType
         mapping:
           create: '#/components/schemas/CommentCreateRequest'
-          read: '#/components/schemas/CommentCreateRequest'
-          update: '#/components/schemas/CommentCreateRequest'
-          delete: '#/components/schemas/CommentCreateRequest'
+          read: '#/components/schemas/CommentGetAllRequest'
+          update: '#/components/schemas/CommentUpdateRequest'
+          getById: '#/components/schemas/CommentGetByIdRequest'
+          delete: '#/components/schemas/CommentDeleteRequest'
 
     Error:
       type: object
@@ -161,9 +182,10 @@ components:
         propertyName: responseType
         mapping:
           create: '#/components/schemas/CommentCreateResponse'
-          read: '#/components/schemas/CommentCreateResponse'
-          update: '#/components/schemas/CommentCreateResponse'
-          delete: '#/components/schemas/CommentCreateResponse'
+          read: '#/components/schemas/CommentGetAllResponse'
+          update: '#/components/schemas/CommentUpdateResponse'
+          getById: '#/components/schemas/CommentGetByIdResponse'
+          delete: '#/components/schemas/CommentDeleteResponse'
 
     EntityId:
       type: string
@@ -179,10 +201,8 @@ components:
 
     BaseComment:
       type: object
-      description: Общий тип для комментария и рейтинга
+      description: Объект описывает свойства, одинаковые для create и update
       properties:
-        id:
-          $ref: '#/components/schemas/CommentId'
         entityId:
           $ref: '#/components/schemas/EntityId'
         entityType:
@@ -202,6 +222,10 @@ components:
         - user
     #        ...
 
+    CommentCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseComment'
+
     CommentCreateRequest:
       allOf:
         - $ref: '#/components/schemas/IRequest'
@@ -209,7 +233,26 @@ components:
         - type: object
           properties:
             comment:
-              $ref: '#/components/schemas/BaseComment'
+              $ref: '#/components/schemas/CommentCreateObject'
+
+    CommentUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseComment'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+            lock:
+              $ref: '#/components/schemas/AdLock'
+
+    CommentUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            comment:
+              $ref: '#/components/schemas/CommentUpdateObject'
 
     CommentGetAllRequest:
       allOf:
@@ -219,6 +262,25 @@ components:
           properties:
             type:
               $ref: '#/components/schemas/EntityType'
+
+    CommentGetByIdRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+
+
+    CommentDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
 
     CommentCreateResponse:
       allOf:
@@ -230,9 +292,31 @@ components:
         - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/CommentResponseMulti'
 
+    CommentDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentGetByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
     CommentResponseObject:
       allOf:
         - $ref: '#/components/schemas/BaseComment'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+            lock:
+              $ref: '#/components/schemas/AdLock'
 
     CommentResponseSingle:
       allOf:
@@ -240,17 +324,17 @@ components:
           description: Ответ с одним объектом объявления
           properties:
             comment:
-              $ref: '#/components/schemas/BaseComment'
+              $ref: '#/components/schemas/CommentResponseObject'
 
     CommentResponseMulti:
       allOf:
         - type: object
           description: Список найденных объектов
           properties:
-            ads:
+            comments:
               type: array
               items:
-                $ref: '#/components/schemas/BaseComment'
+                $ref: '#/components/schemas/CommentResponseObject'
 
     # STUBS ======================
     CommentRequestDebugMode:
