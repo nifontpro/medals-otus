@@ -1,0 +1,369 @@
+openapi: 3.0.4
+info:
+  title: Marketplace
+  description: This is a place where sellers and buyers meat each other
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: comment
+    description: Комментарии и рейтинг сущности
+
+paths:
+
+  /comment/create:
+    post:
+      tags:
+        - comment
+      summary: Создать комментарий для сущности
+      operationId: commentCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentCreateResponse'
+
+  /comment/update:
+    post:
+      tags:
+        - comment
+      summary: Создать комментарий для сущности
+      operationId: commentUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentCreateResponse'
+
+  /comment/get_all:
+    post:
+      tags:
+        - comment
+      summary: Получить все комментарии по типу
+      operationId: getAllComments
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentGetAllRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentGetAllResponse'
+
+  /comment/delete:
+    post:
+      tags:
+        - comment
+      summary: Удалить комментарий
+      operationId: commentDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentId'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentDeleteResponse'
+
+  /comment/getById:
+    post:
+      tags:
+        - comment
+      summary: Получить комментарий по идентификатору
+      operationId: commentGetById
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentId'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentGetByIdResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/CommentCreateRequest'
+          read: '#/components/schemas/CommentGetAllRequest'
+          update: '#/components/schemas/CommentUpdateRequest'
+          getById: '#/components/schemas/CommentGetByIdRequest'
+          delete: '#/components/schemas/CommentDeleteRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/CommentCreateResponse'
+          read: '#/components/schemas/CommentGetAllResponse'
+          update: '#/components/schemas/CommentUpdateResponse'
+          getById: '#/components/schemas/CommentGetByIdResponse'
+          delete: '#/components/schemas/CommentDeleteResponse'
+
+    EntityId:
+      type: string
+      description: Идентификатор любой комментируемой сущности
+      default: selected_ad_id
+    CommentId:
+      type: string
+      description: Идентификатор элемента рейтинга
+      default: comment_id
+    AdLock:
+      type: string
+      description: Версия оптимистичной блокировки
+
+    BaseComment:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        entityId:
+          $ref: '#/components/schemas/EntityId'
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        comment:
+          type: string
+          description: Текст комментария
+        rating:
+          type: integer
+          description: Рейтинг (0-10)
+
+    EntityType:
+      type: string
+      description: Тип сущности
+      enum:
+        - ad
+        - user
+    #        ...
+
+    CommentCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseComment'
+
+    CommentCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            comment:
+              $ref: '#/components/schemas/CommentCreateObject'
+
+    CommentUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseComment'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+            lock:
+              $ref: '#/components/schemas/AdLock'
+
+    CommentUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            comment:
+              $ref: '#/components/schemas/CommentUpdateObject'
+
+    CommentGetAllRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            type:
+              $ref: '#/components/schemas/EntityType'
+
+    CommentGetByIdRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+
+
+    CommentDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CommentRequestDebug'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+
+    CommentCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentGetAllResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseMulti'
+
+    CommentDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentGetByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseComment'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/CommentId'
+            lock:
+              $ref: '#/components/schemas/AdLock'
+
+    CommentResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом объявления
+          properties:
+            comment:
+              $ref: '#/components/schemas/CommentResponseObject'
+
+    CommentResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommentResponseObject'
+
+    # STUBS ======================
+    CommentRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    CommentRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/CommentDebug'
+
+    CommentDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/CommentRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/CommentRequestDebugStubs'
+
+    CommentRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badRating # 0-10
+        - cannotDelete
