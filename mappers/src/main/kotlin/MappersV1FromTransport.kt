@@ -3,17 +3,16 @@ package ru.otus.otuskotlin.marketplace.mappers.v1
 import ru.otus.MkplContext
 import ru.otus.api.v1.models.*
 import ru.otus.model.*
-import ru.otus.otuskotlin.marketplace.mappers.v1.exceptions.UnknownRequestClass
 import ru.otus.stubs.MkplStubs
 
-fun MkplContext.fromTransport(request: IRequest) = when (request) {
+/*fun MkplContext.fromTransport(request: IRequest) = when (request) {
     is CommentCreateRequest -> fromTransport(request)
     is CommentGetAllRequest -> fromTransport(request)
     is CommentGetByIdRequest -> fromTransport(request)
     is CommentUpdateRequest -> fromTransport(request)
     is CommentDeleteRequest -> fromTransport(request)
     else -> throw UnknownRequestClass(request.javaClass)
-}
+}*/
 
 private fun String?.toCommentId() = this?.let { MkplCommentId(it) } ?: MkplCommentId.NONE
 private fun String?.toEntityId() = this?.let { MkplEntityId(it) } ?: MkplEntityId.NONE
