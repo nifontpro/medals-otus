@@ -1,0 +1,10 @@
+version: '3'
+networks:
+  net:
+services:
+  web:
+    build: .
+    networks:
+      - net
+    ports:
+      - "8080:8080"

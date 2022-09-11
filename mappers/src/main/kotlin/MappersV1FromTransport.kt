@@ -47,7 +47,7 @@ fun MkplContext.fromTransport(request: CommentCreateRequest) {
 fun MkplContext.fromTransport(request: CommentGetAllRequest) {
     command = MkplCommand.GET_ALL
     requestId = request.requestId()
-    commentRequest.entityType = request.type?.fromTransport()!!
+    commentRequest.entityType = request.type.fromTransport()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }

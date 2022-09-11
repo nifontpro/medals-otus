@@ -17,5 +17,5 @@ data class MkplContext(
     var timeStart: Instant = Instant.MIN,
     var commentRequest: MkplComment = MkplComment(),
     var commentResponse: MkplComment = MkplComment(),
-    var commentsResponse: MutableList<MkplComment> = mutableListOf(),
+    val commentsResponse: MutableList<MkplComment> = mutableListOf(),
 )
