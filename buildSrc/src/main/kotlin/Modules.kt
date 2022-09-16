@@ -4,4 +4,5 @@ object Modules {
 	const val mappers = ":mappers"
 	const val stubs = ":comment-stubs"
 	const val CoR = ":cor"
+	const val bussines = ":bussines"
 }

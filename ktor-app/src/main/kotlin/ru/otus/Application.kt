@@ -15,6 +15,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import org.slf4j.event.Level
+import ru.otus.bussines.CommentProcessor
 import ru.otus.v1.v1Comment
 
 fun main(args: Array<String>): Unit =
@@ -59,8 +60,9 @@ fun Application.module() {
 			call.respondText("Hello, world!")
 		}
 
+		val processor = CommentProcessor()
 		route("v1") {
-			v1Comment()
+			v1Comment(processor)
 		}
 
 		static("static") {

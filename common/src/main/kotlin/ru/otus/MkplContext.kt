@@ -2,7 +2,6 @@ package ru.otus
 
 import ru.otus.model.*
 import ru.otus.stubs.MkplStubs
-import java.time.Instant
 
 data class MkplContext(
 
@@ -14,7 +13,7 @@ data class MkplContext(
     var stubCase: MkplStubs = MkplStubs.NONE,
 
     var requestId: MkplRequestId = MkplRequestId.NONE,
-    var timeStart: Instant = Instant.MIN,
+    var timeStart: Long = System.currentTimeMillis(),
     var commentRequest: MkplComment = MkplComment(),
     var commentResponse: MkplComment = MkplComment(),
     val commentsResponse: MutableList<MkplComment> = mutableListOf(),
