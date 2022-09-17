@@ -8,10 +8,10 @@ import ru.otus.cor.rootChain
 import ru.otus.model.MkplCommand
 
 class CommentProcessor {
-	suspend fun exec(ctx: MkplContext) = BusinessChain.exec(ctx)
+	suspend fun exec(ctx: MkplContext) = businessChain.exec(ctx)
 
 	companion object {
-		private val BusinessChain = rootChain {
+		private val businessChain = rootChain {
 			initStatus("Инициализация статуса")
 
 			operation("Создание объявления", MkplCommand.CREATE) {
