@@ -37,8 +37,9 @@ dependencies {
 	implementation(project(Modules.transport))
 	implementation(project(Modules.mappers))
 	implementation(project(Modules.stubs))
+	implementation(project(Modules.bussines))
 
-	implementation(kotlin("stdlib-jdk8"))
+//	implementation(kotlin("stdlib-common"))
 	implementation(ktor("core")) // "io.ktor:ktor-server-core:$ktorVersion"
 	implementation(ktor("netty")) // "io.ktor:ktor-ktor-server-netty:$ktorVersion"
 

@@ -12,4 +12,6 @@ object CommentStub {
 		COMMENT_USER_1
 	)
 
+	fun prepareResult(block: MkplComment.() -> Unit): MkplComment = get().apply(block)
+
 }

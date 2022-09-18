@@ -2,23 +2,24 @@ package ru.otus.v1
 
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import ru.otus.bussines.CommentProcessor
 
-fun Route.v1Comment() {
+fun Route.v1Comment(processor: CommentProcessor) {
 	route("comment") {
 		post("create") {
-			call.createComment()
+			call.createComment(processor)
 		}
 		post("get_all") {
-			call.getAllComment()
+			call.getAllComment(processor)
 		}
 		post("get_id") {
-			call.getByIdComment()
+			call.getCommentById(processor)
 		}
 		post("update") {
-			call.updateComment()
+			call.updateComment(processor)
 		}
 		post("delete") {
-			call.deleteComment()
+			call.deleteComment(processor)
 		}
 	}
 }

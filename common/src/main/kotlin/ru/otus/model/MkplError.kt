@@ -1,9 +1,18 @@
 package ru.otus.model
 
 data class MkplError(
-    val code: String = "",
-    val group: String = "",
-    val field: String = "",
-    val message: String = "",
-    val exception: Throwable? = null,
-)
+	val code: String = "",
+	val group: String = "",
+	val field: String = "",
+	val message: String = "",
+	val exception: Throwable? = null,
+	val level: Levels = Levels.ERROR,
+) {
+	@Suppress("unused")
+	enum class Levels {
+		ERROR,
+		WARNING,
+		INFO,
+	}
+}
+
