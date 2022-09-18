@@ -1,6 +1,7 @@
 package ru.otus.cor.handlers
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import ru.otus.cor.CorDslMarker
 import ru.otus.cor.ICorChainDsl
@@ -34,9 +35,12 @@ suspend fun <T> executeSequential(context: T, execs: List<ICorExec<T>>): Unit =
  * Стратегия параллельного исполнения
  */
 suspend fun <T> executeParallel(context: T, execs: List<ICorExec<T>>): Unit = coroutineScope {
-    execs.forEach {
-        launch { it.exec(context) }
-    }
+
+	val jobs = execs.map {
+		launch { it.exec(context) }
+	}.toList()
+
+	jobs.joinAll()
 }
 
 @CorDslMarker
