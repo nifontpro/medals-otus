@@ -10,7 +10,7 @@ fun ICorChainDsl<MkplContext>.validation(block: ICorChainDsl<MkplContext>.() -> 
 	title = "Валидация"
 	on { state == MkplState.RUNNING }
 
-	worker("Копируем поля в commentValidation") { commentValidated = commentRequest.deepCopy() }
+	worker("Копируем поля в commentValidation") { commentValidating = commentRequest.deepCopy() }
 	block()
 	finishValidation("Завершение проверок")
 }

@@ -1,17 +1,19 @@
+package stub
+
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import ru.otus.MkplContext
 import ru.otus.bussines.CommentProcessor
 import ru.otus.model.*
+import ru.otus.stubs.CommentStub
 import ru.otus.stubs.MkplStubs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@ExperimentalCoroutinesApi
-class CommentUpdateStubTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class CommentCreateStubTest {
 
 	private val processor = CommentProcessor()
-	private val id = MkplCommentId("CA1")
 	private val entityId = MkplEntityId("EA111")
 	private val comment = "Отличный товар для дома"
 	private val rating = 5
@@ -21,12 +23,11 @@ class CommentUpdateStubTest {
 	fun create() = runTest {
 
 		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
+			command = MkplCommand.CREATE,
 			state = MkplState.NONE,
 			workMode = MkplWorkMode.STUB,
 			stubCase = MkplStubs.SUCCESS,
 			commentRequest = MkplComment(
-				id = id,
 				entityId = entityId,
 				comment = comment,
 				rating = rating,
@@ -34,37 +35,20 @@ class CommentUpdateStubTest {
 			)
 		)
 		processor.exec(ctx)
-		assertEquals(id, ctx.commentResponse.id)
-		assertEquals(entityId, ctx.commentResponse.entityId)
-		assertEquals(entityType, ctx.commentResponse.entityType)
-		assertEquals(comment, ctx.commentResponse.comment)
-		assertEquals(rating, ctx.commentResponse.rating)
-	}
-
-	@Test
-	fun badId() = runTest {
-		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
-			state = MkplState.NONE,
-			workMode = MkplWorkMode.STUB,
-			stubCase = MkplStubs.BAD_ID,
-			commentRequest = MkplComment()
-		)
-		processor.exec(ctx)
-		assertEquals(MkplComment(), ctx.commentResponse)
-		assertEquals("id", ctx.errors.firstOrNull()?.field)
-		assertEquals("validation", ctx.errors.firstOrNull()?.group)
+		assertEquals(CommentStub.get().entityId, ctx.commentResponse.entityId)
+		assertEquals(CommentStub.get().comment, ctx.commentResponse.comment)
+		assertEquals(CommentStub.get().rating, ctx.commentResponse.rating)
+		assertEquals(CommentStub.get().entityType, ctx.commentResponse.entityType)
 	}
 
 	@Test
 	fun badComment() = runTest {
 		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
+			command = MkplCommand.CREATE,
 			state = MkplState.NONE,
 			workMode = MkplWorkMode.STUB,
 			stubCase = MkplStubs.BAD_COMMENT,
 			commentRequest = MkplComment(
-				id = id,
 				entityId = entityId,
 				comment = comment,
 				rating = rating,
@@ -80,12 +64,11 @@ class CommentUpdateStubTest {
 	@Test
 	fun badRating() = runTest {
 		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
+			command = MkplCommand.CREATE,
 			state = MkplState.NONE,
 			workMode = MkplWorkMode.STUB,
 			stubCase = MkplStubs.BAD_RATING,
 			commentRequest = MkplComment(
-				id = id,
 				entityId = entityId,
 				comment = comment,
 				rating = rating,
@@ -96,16 +79,19 @@ class CommentUpdateStubTest {
 		assertEquals(MkplComment(), ctx.commentResponse)
 		assertEquals("rating", ctx.errors.firstOrNull()?.field)
 		assertEquals("validation", ctx.errors.firstOrNull()?.group)
+
 	}
 
 	@Test
 	fun databaseError() = runTest {
 		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
+			command = MkplCommand.CREATE,
 			state = MkplState.NONE,
 			workMode = MkplWorkMode.STUB,
 			stubCase = MkplStubs.DB_ERROR,
-			commentRequest = MkplComment()
+			commentRequest = MkplComment(
+				entityId = entityId,
+			)
 		)
 		processor.exec(ctx)
 		assertEquals(MkplComment(), ctx.commentResponse)
@@ -115,17 +101,16 @@ class CommentUpdateStubTest {
 	@Test
 	fun badNoCase() = runTest {
 		val ctx = MkplContext(
-			command = MkplCommand.UPDATE,
+			command = MkplCommand.CREATE,
 			state = MkplState.NONE,
 			workMode = MkplWorkMode.STUB,
 			stubCase = MkplStubs.NONE,
 			commentRequest = MkplComment(
-				id = id,
 				entityId = entityId,
 				comment = comment,
 				rating = rating,
 				entityType = entityType
-			),
+			)
 		)
 		processor.exec(ctx)
 		assertEquals(MkplComment(), ctx.commentResponse)

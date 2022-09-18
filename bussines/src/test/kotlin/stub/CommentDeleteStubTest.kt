@@ -1,3 +1,5 @@
+package stub
+
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import ru.otus.MkplContext
