@@ -1,4 +1,4 @@
-package ru.otus.bussines.workers
+package ru.otus.bussines.stubs
 
 import ru.otus.MkplContext
 import ru.otus.cor.ICorChainDsl

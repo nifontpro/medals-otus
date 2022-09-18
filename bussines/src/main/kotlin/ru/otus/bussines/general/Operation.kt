@@ -1,4 +1,4 @@
-package ru.otus.bussines.groups
+package ru.otus.bussines.general
 
 import ru.otus.MkplContext
 import ru.otus.cor.ICorChainDsl

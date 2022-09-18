@@ -7,4 +7,8 @@ data class MkplComment(
     var comment: String = "",
     var rating: Int = -1,
     val permissionsClient: MutableSet<MkplCommentPermissionClient> = mutableSetOf()
-)
+)  {
+    fun deepCopy(): MkplComment = copy(
+        permissionsClient = permissionsClient.toMutableSet()
+    )
+}
