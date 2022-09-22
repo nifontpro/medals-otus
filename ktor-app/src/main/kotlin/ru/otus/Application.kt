@@ -15,7 +15,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import org.slf4j.event.Level
+import ru.otus.base.KtorWsSessions
 import ru.otus.bussines.CommentProcessor
+import ru.otus.v1.mpWsHandlerV1
 import ru.otus.v1.v1Comment
 
 fun main(args: Array<String>): Unit =
@@ -63,6 +65,10 @@ fun Application.module() {
 		val processor = CommentProcessor()
 		route("v1") {
 			v1Comment(processor)
+		}
+
+		webSocket("/ws/v1") {
+			mpWsHandlerV1(processor, KtorWsSessions.sessions)
 		}
 
 		static("static") {
