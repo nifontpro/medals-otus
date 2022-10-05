@@ -10,9 +10,8 @@ fun ICorChainDsl<MkplContext>.operation(
 	title: String,
 	command: MkplCommand,
 	block: ICorChainDsl<MkplContext>.() -> Unit
-) =
-	chain {
-		block()
-		this.title = title
-		on { this.command == command && state == MkplState.RUNNING }
-	}
+) = chain {
+	block()
+	this.title = title
+	on { this.command == command && state == MkplState.RUNNING }
+}

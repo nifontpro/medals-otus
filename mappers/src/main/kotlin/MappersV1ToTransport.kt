@@ -14,6 +14,12 @@ fun MkplContext.toTransportComment(): IResponse = when (val cmd = command) {
     MkplCommand.NONE -> throw UnknownMkplCommand(cmd)
 }
 
+fun MkplContext.toTransportInit() = CommentInitResponse(
+    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
+    result = if (errors.isEmpty()) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    errors = errors.toTransportErrors(),
+)
+
 fun MkplContext.toTransportCreate() = CommentCreateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (state == MkplState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
