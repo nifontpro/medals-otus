@@ -19,5 +19,5 @@ suspend fun WebSocketSession.mpWsHandlerV1(
 	fromTransport = { fromTransport(apiV1Mapper.readValue(it, IRequest::class.java)) },
 	toTransportInit = { apiV1Mapper.writeValueAsString(toTransportInit()) },
 	toTransportBiz = { apiV1Mapper.writeValueAsString(toTransportComment()) },
-	apiVersion = "v1",
+	apiVersion = "v1"
 )
