@@ -9,8 +9,10 @@ version = "1.0-SNAPSHOT"
 allprojects {
     repositories {
         google()
-        mavenCentral()
         maven { url = uri("https://jitpack.io") }
+
+        mavenCentral()
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
     }
 }
 
