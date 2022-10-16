@@ -1,9 +1,12 @@
 package ru.otus
 
 import ru.otus.model.*
+import ru.otus.repo.ICommentRepository
 import ru.otus.stubs.MkplStubs
 
 data class MkplContext(
+	var settings: MkplSettings = MkplSettings(),
+	var repository: ICommentRepository = ICommentRepository.NONE,
 
 	var command: MkplCommand = MkplCommand.NONE,
 	var state: MkplState = MkplState.NONE,
@@ -16,8 +19,13 @@ data class MkplContext(
 	var timeStart: Long = System.currentTimeMillis(),
 	var commentRequest: MkplComment = MkplComment(),
 	var commentResponse: MkplComment = MkplComment(),
-	val commentsResponse: MutableList<MkplComment> = mutableListOf(),
+	var commentsResponse: MutableList<MkplComment> = mutableListOf(),
 
 	var commentValidating: MkplComment = MkplComment(),
 	var commentValidated: MkplComment = MkplComment(),
+
+	var commentRepoRead: MkplComment = MkplComment(),
+	var commentRepoPrepare: MkplComment = MkplComment(),
+	var commentRepoDone: MkplComment = MkplComment(),
+	var commentsRepoDone: MutableList<MkplComment> = mutableListOf(),
 )
