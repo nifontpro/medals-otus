@@ -63,7 +63,7 @@ class CommentRepoInMemory(
 		)
 	}
 
-	override suspend fun getByIdComments(request: DbCommentIdRequest): DbCommentResponse {
+	override suspend fun getByIdComment(request: DbCommentIdRequest): DbCommentResponse {
 		val key = request.id.takeIf { it != MkplCommentId.NONE }?.asString() ?: return resultErrorEmptyId
 		return cache.get(key)
 			?.let {

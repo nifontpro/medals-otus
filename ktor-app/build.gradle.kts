@@ -38,6 +38,7 @@ dependencies {
 	implementation(project(Modules.mappers))
 	implementation(project(Modules.stubs))
 	implementation(project(Modules.bussines))
+	implementation(project(Modules.inmemoryRepo))
 
 //	implementation(kotlin("stdlib-common"))
 	implementation(ktor("core")) // "io.ktor:ktor-server-core:$ktorVersion"

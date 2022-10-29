@@ -6,4 +6,6 @@ object Modules {
 	const val CoR = ":cor"
 	const val bussines = ":bussines"
 	const val inmemoryRepo = ":repo-inmemory"
+	const val repoTests = ":repo-tests"
+	const val repoStubs = ":repo-stubs"
 }

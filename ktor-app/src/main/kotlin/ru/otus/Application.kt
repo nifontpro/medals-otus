@@ -17,6 +17,8 @@ import io.ktor.server.websocket.*
 import org.slf4j.event.Level
 import ru.otus.base.KtorWsSessions
 import ru.otus.bussines.CommentProcessor
+import ru.otus.inmemory.CommentRepoInMemory
+import ru.otus.model.MkplSettings
 import ru.otus.v1.mpWsHandlerV1
 import ru.otus.v1.v1Comment
 
@@ -24,7 +26,7 @@ fun main(args: Array<String>): Unit =
 	io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
-fun Application.module() {
+fun Application.module(settings: MkplSettings? = null) {
 
 	install(CachingHeaders)
 	install(DefaultHeaders)
@@ -57,12 +59,18 @@ fun Application.module() {
 	@Suppress("OPT_IN_USAGE")
 	install(Locations)
 
+	val corSettings by lazy {
+		settings ?: MkplSettings(
+			repoTest = CommentRepoInMemory()
+		)
+	}
+
 	routing {
 		get("/") {
 			call.respondText("Hello, world!")
 		}
 
-		val processor = CommentProcessor()
+		val processor = CommentProcessor(settings = corSettings)
 		route("v1") {
 			v1Comment(processor)
 		}

@@ -3,7 +3,7 @@ package ru.otus.repo
 interface ICommentRepository {
 	suspend fun createComment(request: DbCommentRequest): DbCommentResponse
 	suspend fun getAllComments(): DbCommentsResponse
-	suspend fun getByIdComments(request: DbCommentIdRequest): DbCommentResponse
+	suspend fun getByIdComment(request: DbCommentIdRequest): DbCommentResponse
 	suspend fun updateComment(request: DbCommentRequest): DbCommentResponse
 	suspend fun deleteComment(request: DbCommentIdRequest): DbCommentResponse
 
@@ -17,7 +17,7 @@ interface ICommentRepository {
 				TODO("Not yet implemented")
 			}
 
-			override suspend fun getByIdComments(request: DbCommentIdRequest): DbCommentResponse {
+			override suspend fun getByIdComment(request: DbCommentIdRequest): DbCommentResponse {
 				TODO("Not yet implemented")
 			}
 

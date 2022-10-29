@@ -13,7 +13,7 @@ fun ICorChainDsl<MkplContext>.repoGetById(title: String) = worker {
 	on { state == MkplState.RUNNING }
 	handle {
 		val request = DbCommentIdRequest(commentValidated)
-		val result = repository.getByIdComments(request)
+		val result = repository.getByIdComment(request)
 		val resultAd = result.data
 		if (result.isSuccess && resultAd != null) {
 			commentRepoRead = resultAd
