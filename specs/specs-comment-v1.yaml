@@ -186,6 +186,7 @@ components:
           update: '#/components/schemas/CommentUpdateResponse'
           getById: '#/components/schemas/CommentGetByIdResponse'
           delete: '#/components/schemas/CommentDeleteResponse'
+          init: '#/components/schemas/CommentInitResponse'
 
     EntityId:
       type: string
@@ -306,6 +307,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/CommentResponseSingle'
+
+    CommentInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
 
     CommentResponseObject:
       allOf:
